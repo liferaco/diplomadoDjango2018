@@ -4,6 +4,9 @@ from django.db import models
 class marca(models.Model):
 	nombre = models.CharField(max_length=50)
 
+	def __str__(self):
+		return '{}'.format(self.nombre)
+
 class producto(models.Model):
 	idMarca = models.ForeignKey(marca, on_delete=models.CASCADE)
 	codigo = models.CharField(max_length=50,unique=True)
