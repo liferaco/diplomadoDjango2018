@@ -1,6 +1,8 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from pagina.forms import productoForm
+from pagina.models import producto
+
 
 # Create your views here.
 def index(request):
@@ -15,3 +17,10 @@ def producto_view(request):
 	else:
 		form = productoForm()
 	return render(request,'pagina/productoForm.html',{'form':form})
+
+def producto_list(request):
+
+	productos = producto.objects.all()
+	contexto = {'productosContex':productos}
+
+	return render(request,'pagina/productoList.html',contexto)
