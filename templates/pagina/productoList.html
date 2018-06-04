@@ -11,6 +11,7 @@
 				<td> Tipo </td>
 				<td> Costo </td>
 				<td> Marca </td>
+				<td> Acción </td>
 			</tr>
 		</thead>
 		<tbody>
@@ -23,6 +24,10 @@
 					<td>{{producto.tipo}}</td>
 					<td>{{producto.costo}}</td>
 					<td>{{producto.idMarca}}</td>
+					<td>
+						<a class="btn btn-primary btn-xs" href="{%url 'pagina:producto_editar' producto.id %}">Editar</a>
+						<a class="btn btn-danger btn-xs" href="{%url 'pagina:producto_eliminar' producto.id %}">Eliminar</a>
+					</td>
 				</tr>
 				{% endfor %}
 			{% else %}

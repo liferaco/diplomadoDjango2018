@@ -16,7 +16,7 @@ def producto_view(request):
 		return redirect('pagina:index')
 	else:
 		form = productoForm()
-	return render(request,'pagina/productoForm.html',{'form':form})
+	return render(request,'pagina/productoForm.html',{'form': form})
 
 def producto_list(request):
 
@@ -24,3 +24,24 @@ def producto_list(request):
 	contexto = {'productosContex':productos}
 
 	return render(request,'pagina/productoList.html',contexto)
+
+def producto_update(request,idProducto):
+
+	productos = producto.objects.get(id=idProducto)
+	if request.method=='GET':
+		form= productoForm(instance=productos)
+	else:
+		form=productoForm(request.POST,instance=productos)
+		if form.is_valid():
+			form.save()
+		return redirect('pagina:producto_listar')
+	return render(request,'pagina/productoForm.html',{'form':form})
+
+
+def producto_delete(request,idProducto):
+	productos = producto.objects.get(id=idProducto)
+	if request.method=='POST':
+		productos.delete()
+		return redirect('pagina:producto_listar')
+	return render(request,'pagina/productoDelete.html',{'productos':productos})
+
