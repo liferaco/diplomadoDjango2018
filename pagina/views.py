@@ -1,5 +1,7 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
+from django.views.generic import ListView,CreateView,UpdateView,DeleteView
+from django.urls import reverse_lazy
 from pagina.forms import productoForm
 from pagina.models import producto
 
@@ -45,3 +47,23 @@ def producto_delete(request,idProducto):
 		return redirect('pagina:producto_listar')
 	return render(request,'pagina/productoDelete.html',{'productos':productos})
 
+class productoList(ListView):
+	model = producto
+	template_name = 'pagina/productoList.html'
+
+class productoCreate(CreateView):
+	model = producto
+	form_class = productoForm
+	template_name = 'pagina/productoForm.html'
+	success_url = reverse_lazy('pagina:producto_listar')
+
+class productoUpdate(UpdateView):
+	model = producto
+	form_class = productoForm
+	template_name = 'pagina/productoForm.html'
+	success_url = reverse_lazy('pagina:producto_listar')
+
+class productoDelete(DeleteView):
+	model = producto
+	template_name = 'pagina/productoDelete.html'
+	success_url = reverse_lazy('pagina:producto_listar')

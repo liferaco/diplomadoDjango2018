@@ -15,8 +15,8 @@
 			</tr>
 		</thead>
 		<tbody>
-			{% if productosContex%}
-				{% for producto in productosContex %}
+			{% if object_list%}
+				{% for producto in object_list %}
 				<tr>
 					<td>{{producto.id}}</td>
 					<td>{{producto.codigo}}</td>
