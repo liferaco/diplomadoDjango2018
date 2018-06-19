@@ -75,7 +75,7 @@ class productoDelete(DeleteView):
 	template_name = 'pagina/productoDelete.html'
 	success_url = reverse_lazy('pagina:producto_listar')
 
-class ReportePersonasPDF(View):
+class ReporteProductosPDF(View):
 	
 	def cabecera(self,pdf):
 		#Utilizamos el archivo logo_django.png que está guardado en la carpeta media/imagenes
@@ -91,21 +91,18 @@ class ReportePersonasPDF(View):
 
 	def get(self, request, *args, **kwargs):
 		#Indicamos el tipo de contenido a devolver, en este caso un pdf
-		
+		response = HttpResponse(content_type='application/pdf')
 		#La clase io.BytesIO permite tratar un array de bytes como un fichero binario, se utiliza como almacenamiento temporal
 		buffer = BytesIO()
 		#Canvas nos permite hacer el reporte con coordenadas X y Y
 		pdf = canvas.Canvas(buffer)
 		#Llamo al método cabecera donde están definidos los datos que aparecen en la cabecera del reporte.
 		self.cabecera(pdf)
+		y = 600
+		self.tabla(pdf, y)
 		#Con show page hacemos un corte de página para pasar a la siguiente
-		# pdf.showPage()
-		nombre_archivo ="ReporteProductos.pdf"
-		#Definimos que el tipo de respuesta a devolver es un archivo de microsoft excel
-		response = HttpResponse(content_type="application/pdf")
-		contenido = "attachment; filename={0}".format(nombre_archivo)
-		response["Content-Disposition"] = contenido
-		pdf.save(response)
+		pdf.showPage()
+		pdf.save()
 		pdf = buffer.getvalue()
 		buffer.close()
 		response.write(pdf)
@@ -134,22 +131,5 @@ class ReportePersonasPDF(View):
 		#Definimos la coordenada donde se dibujará la tabla
 		detalle_orden.drawOn(pdf, 60,y)
 
-	def get(self, request, *args, **kwargs):
-		#Indicamos el tipo de contenido a devolver, en este caso un pdf
-		response = HttpResponse(content_type='application/pdf')
-		#La clase io.BytesIO permite tratar un array de bytes como un fichero binario, se utiliza como almacenamiento temporal
-		buffer = BytesIO()
-		#Canvas nos permite hacer el reporte con coordenadas X y Y
-		pdf = canvas.Canvas(buffer)
-		#Llamo al método cabecera donde están definidos los datos que aparecen en la cabecera del reporte.
-		self.cabecera(pdf)
-		y = 600
-		self.tabla(pdf, y)
-		#Con show page hacemos un corte de página para pasar a la siguiente
-		pdf.showPage()
-		pdf.save()
-		pdf = buffer.getvalue()
-		buffer.close()
-		response.write(pdf)
-		return response
+
 
