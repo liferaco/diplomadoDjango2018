@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.views.generic import ListView,CreateView,UpdateView,DeleteView
 from django.urls import reverse_lazy
 from pagina.forms import productoForm
-from pagina.models import producto
+from pagina.models import producto,marca
 
 from django.conf import settings
 from io import BytesIO
@@ -56,7 +56,29 @@ def producto_delete(request,idProducto):
 
 class productoList(ListView):
 	model = producto
+	second_model = marca
 	template_name = 'pagina/productoList.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(productoList,self).get_context_data(**kwargs)
+		context['productosContex'] = producto.objects.all()
+		context['marcasContex'] = marca.objects.all()
+		return context
+
+class productoFiltrar(ListView):
+	model = producto
+	second_model = marca
+	template_name = 'pagina/productoList.html'
+
+	def get_queryset (self, **kwargs):
+		a = self.kwargs['idMarca']
+		return producto.objects.filter(idMarca=a)
+
+	def get_context_data(self, **kwargs):
+		context = super(productoFiltrar,self).get_context_data(**kwargs)
+		context['productosContex'] = producto.objects.all()
+		context['marcasContex'] = marca.objects.all()
+		return context
 
 class productoCreate(CreateView):
 	model = producto
